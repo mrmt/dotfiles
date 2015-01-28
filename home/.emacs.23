@@ -1,0 +1,350 @@
+; -*-emacs-lisp-*-
+
+(setq load-path (cons (expand-file-name "~/Library/Emacs") load-path))
+
+(load-library "50goby.el")
+;; (load-library "50egg.el")
+;; (load-library "50anthy.el")
+;; (load-library "50apel.el")
+;; (load-library "50skk.el")
+;; (load-library "50mew.el")
+;; (load-library "50mhc.el")
+;; (load-library "50ruby-elisp.el")
+;; (load-library "50rdtool-elisp.el")
+;; (load-library "50navi2ch-cvs.el")
+(load-library "55irchat-jp.el")
+(load-library "56apache-mode.el")
+
+(setenv "PATH"
+	(concat
+	 (expand-file-name "~/bin") ":"
+	 (getenv "PATH")))
+
+;; (save-current-buffer
+;;   (let
+;;       ((buffer (set-buffer (generate-new-buffer "keychain")))
+;;        (eval-sh-export
+;; 	(lambda  (name)
+;; 	  (progn
+;; 	    (goto-char (point-min))
+;; 	    (setenv name
+;; 		    (buffer-substring
+;; 		     (search-forward (concat name "="))
+;; 		     (- (search-forward ";") 1)))))))
+;;     (insert-file-contents
+;;      (expand-file-name "~/.keychain/chiyochan-sh")
+;;     (funcall eval-sh-export "SSH_AUTH_SOCK")
+;;     (funcall eval-sh-export "SSH_AGENT_PID")
+;;     (kill-buffer buffer)))
+
+; (menu-bar-mode nil)
+(tool-bar-mode 0)
+
+(global-set-key "\e\C-h" 'backward-kill-word)
+(global-set-key "\C-o" 'toggle-input-method)
+
+(auto-compression-mode t)
+;; (global-font-lock-mode t)
+(global-set-key [delete] 'delete-char)
+(global-unset-key "\C-]")
+
+(put 'eval-expression 'disabled nil)
+(setq next-line-add-newlines nil)
+(setq add-log-mailing-address "morimoto@mrmt.net")
+(setq add-log-full-name "Jun Morimoto")
+;; (setq base64-dl-module nil)
+
+(add-to-list 'interpreter-mode-alist '("perl" . perl-mode))
+(setq auto-mode-alist
+      '(
+	("\\.css$" . css-mode)
+	("\\.el$" . emacs-lisp-mode)
+	("\\.rd$" . rd-mode)
+	("\\.xml$" . sgml-mode)
+	("\\.sgml$" . sgml-mode)
+	("\\.rb$" . ruby-mode)
+	("\\.c$" . c-mode)
+	("\\.m$" . c-mode)
+	("\\.cpp$" . c-mode)
+	("\\.html$" . html-mode)
+	("\\.s?html?$" . html-mode)
+	("\\.patch$" . diff-mode)
+	("\\.diff$" . diff-mode)
+	("\\.java$" . java-mode)
+	("\\.js$" . javascript-mode)
+	("\\.php$" . php-mode)
+	("\\.inc$" . php-mode)
+	("\\.php3$" . php-mode)
+	("\\.sql$" . sql-mode)
+	("\\.pm$" . perl-mode)
+	("\\.pl$" . perl-mode)))
+
+(put 'narrow-to-region 'disabled nil)
+
+;;
+;; 行末空白を取る
+;;
+(defun cleanup ()
+  (interactive)
+  (replace-regexp "[ \t]*$" ""))
+
+;;
+;; カレント行を複製(まだちゃんとできていない)
+;;
+(defun dup-line ()
+  "カレント行を複製します."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point))
+          (end))
+      (end-of-line)
+      (copy-to-register 'z start (point) nil)
+      (beginning-of-line)
+      (insert (get-register 'z))
+      (insert "\n"))))
+(global-set-key "\ep" 'dup-line)
+(global-set-key "\eg" 'grep)
+(global-set-key "\ej" 'goto-line)
+(global-set-key "\ec" 'compile)
+(global-set-key "\C-c\C-w" 'kill-rectangle)
+(global-set-key "\C-c\C-y" 'yank-rectangle)
+
+(setq require-final-newline t)
+
+(global-set-key "\e[" 'backward-paragraph)
+(global-set-key "\e]" 'forward-paragraph)
+(setq browse-url-generic-program "open")
+(setq browse-url-browser-function 'browse-url-generic)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun today ()
+  "open today's diary"
+  (interactive)
+  (let
+      ((format-time-month-list
+	'(("Zero" . 0)
+	  ("Jan" . 1) ("Feb" . 2) ("Mar" . 3) ("Apr" . 4) ("May" . 5)
+	  ("Jun" . 6) ("Jul" . 7) ("Aug" . 8) ("Sep" . 9) ("Oct" . 10)
+	  ("Nov" . 11) ("Dec" . 12)))
+       (time-string (current-time-string))
+       year month day path)
+    (setq year
+	  (string-to-int
+	   (substring time-string 20 24)))
+    (setq day
+	  (string-to-int
+	   (substring time-string 8 10)))
+    (setq month
+	  (cdr
+	   (assoc
+	    (substring time-string 4 7)
+	    format-time-month-list)))
+    (setq path
+	  (format "%s/work/diary/%4d/%02d/%02d.tdf"
+		  (expand-file-name "~") year month day))
+    (find-file path)))
+
+(put 'downcase-region 'disabled nil)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(auto-compression-mode t nil (jka-compr))
+ '(case-fold-search t)
+ '(column-number-mode t)
+ '(global-font-lock-mode t nil (font-lock))
+ '(hi-lock-mode t t (hi-lock))
+ '(safe-local-variable-values (quote ((perl-indent-level . 8) (perl-continued-statement-offset . 8) (perl-continued-brace-offset . 0) (perl-brace-offset . -8) (perl-brace-imaginary-offset . 0) (perl-label-offset . -8))))
+ '(scroll-bar-mode nil))
+
+(if nil
+    (custom-set-faces
+     ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
+     ;; Your init file should contain only one such instance.
+     '(font-lock-comment-face ((((class color) (background light)) (:foreground "DeepPink4"))))
+     '(font-lock-constant-face ((((class color) (background light)) (:foreground "DarkGreen"))))
+     '(font-lock-string-face ((((class color) (background light)) (:background "PowderBlue" :foreground "DarkSlateBlue"))))
+     '(font-lock-variable-name-face ((((class color) (background light)) (:foreground "DodgerBlue4")))))
+  )
+
+(add-hook 'cperl-mode-hook
+	  (function (lambda ()
+		      (cperl-set-style 'PerlStyle))))
+;; (server-start)
+
+(defun wheel-scroll (event) (interactive "e")
+  (save-selected-window
+    (select-window (car (car (cdr event))))
+    (cond
+     ((eq (car event) 'mouse-4) (scroll-down 1))
+     ((eq (car event) 'double-mouse-4) (scroll-down 2))
+     ((eq (car event) 'triple-mouse-4) (scroll-down 4))
+     ((eq (car event) 'mouse-5) (scroll-up 1))
+     ((eq (car event) 'double-mouse-5) (scroll-up 2))
+     ((eq (car event) 'triple-mouse-5) (scroll-up 4)))))
+
+(define-key global-map [mouse-4] 'wheel-scroll)
+(define-key global-map [mouse-5] 'wheel-scroll)
+(define-key global-map [vertical-scroll-bar mouse-4] 'wheel-scroll)
+(define-key global-map [vertical-scroll-bar mouse-5] 'wheel-scroll)
+
+(put 'upcase-region 'disabled nil)
+
+(if nil
+    (progn
+      (require 'color-theme)
+      (fringe-mode '(0 . 0))
+      (defun theme ()
+	(interactive "")
+	(let
+	    ((themes
+	      '(color-theme-blue-sea
+		color-theme-calm-forest
+		color-theme-charcoal-black
+		color-theme-clarity
+		color-theme-goldenrod)))
+	  (random t)
+	  (funcall (nth (random (length themes)) themes))))
+      (theme)
+      ))
+
+;; (setq mac-allow-anti-aliasing nil)
+(setq mac-transparency-alpha 95)
+
+;; (set-background-color "black")
+;; (set-foreground-color "white")
+
+;; (set-buffer-file-coding-system 'euc-japan-unix)
+;; (setq default-buffer-file-coding-system 'euc-japan-unix)
+;; (set-input-method "MacOSX")
+
+(setq perl-indent-level 8)
+(setq perl-continued-statement-offset 8)
+(setq perl-continued-brace-offset 0)
+(setq perl-brace-offset -8)
+(setq perl-brace-imaginary-offset 0)
+(setq perl-label-offset -8)
+
+(setq c-indent-level 8)
+(setq c-continued-statement-offset 8)
+(setq c-continued-brace-offset 0)
+(setq c-brace-offset -8)
+(setq c-brace-imaginary-offset 0)
+(setq c-label-offset -8)
+
+(add-hook
+ 'php-mode-hook
+ '(lambda ()
+    (setq tab-width 8
+          c-basic-offset 8
+          c-hanging-comment-ender-p nil)))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+(setq make-backup-files nil)
+
+
+(add-to-list 'default-frame-alist '(font . "fontset-default"))
+(set-face-attribute 'default nil
+                    :family "monaco"
+                    :height 140)
+(set-fontset-font "fontset-default"
+                  'japanese-jisx0208
+                  '("ヒラギノ丸ゴ pro w4*" . "jisx0208.*"))
+(set-fontset-font "fontset-default"
+                  'katakana-jisx0201
+                  '("ヒラギノ丸ゴ pro w4*" . "jisx0201.*"))
+(add-to-list 'face-font-rescale-alist
+             `(,(encode-coding-string ".*ヒラギノ丸ゴ pro w4.*" 'emacs-mule) . 1.2))
+
+(defun escape-html ()
+  ""
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (replace-string "&" "&amp;")
+    (goto-char (point-min))
+    (replace-string "<" "&lt;")
+    (goto-char (point-min))
+    (replace-string ">" "&gt;")))
+
+(defun dakuten ()
+  "泣き別れた濁点・半濁点を修正"
+  (interactive)
+  (save-excursion
+    (replace-all "ゔ" "ゔ")
+    (replace-all "ヴ" "ヴ")
+    (replace-all "が" "が")
+    (replace-all "ぎ" "ぎ")
+    (replace-all "ぐ" "ぐ")
+    (replace-all "げ" "げ")
+    (replace-all "ご" "ご")
+    (replace-all "ざ" "ざ")
+    (replace-all "じ" "じ")
+    (replace-all "ず" "ず")
+    (replace-all "ぜ" "ぜ")
+    (replace-all "ぞ" "ぞ")
+    (replace-all "だ" "だ")
+    (replace-all "ぢ" "ぢ")
+    (replace-all "づ" "づ")
+    (replace-all "で" "で")
+    (replace-all "ど" "ど")
+    (replace-all "ば" "ば")
+    (replace-all "び" "び")
+    (replace-all "ぶ" "ぶ")
+    (replace-all "べ" "べ")
+    (replace-all "ぼ" "ぼ")
+    (replace-all "ガ" "ガ")
+    (replace-all "ギ" "ギ")
+    (replace-all "グ" "グ")
+    (replace-all "ゲ" "ゲ")
+    (replace-all "ゴ" "ゴ")
+    (replace-all "ザ" "ザ")
+    (replace-all "ジ" "ジ")
+    (replace-all "ズ" "ズ")
+    (replace-all "ゼ" "ゼ")
+    (replace-all "ゾ" "ゾ")
+    (replace-all "ダ" "ダ")
+    (replace-all "ヂ" "ヂ")
+    (replace-all "ヅ" "ヅ")
+    (replace-all "デ" "デ")
+    (replace-all "ド" "ド")
+    (replace-all "バ" "バ")
+    (replace-all "ビ" "ビ")
+    (replace-all "ブ" "ブ")
+    (replace-all "ベ" "ベ")
+    (replace-all "ボ" "ボ")
+    (replace-all "ぱ" "ぱ")
+    (replace-all "ぴ" "ぴ")
+    (replace-all "ぷ" "ぷ")
+    (replace-all "ぺ" "ぺ")
+    (replace-all "ぽ" "ぽ")
+    (replace-all "パ" "パ")
+    (replace-all "ピ" "ピ")
+    (replace-all "プ" "プ")
+    (replace-all "ペ" "ペ")
+    (replace-all "ポ" "ポ")
+    ))
+
+(defun replace-all (a b)
+    (goto-char (point-min))
+    (replace-string a b))
+
+;; Excel, Numbersからペーストするとき属性は無視する
+(setq yank-excluded-properties t)
+
+(defun mixi-photo ()
+  ""
+  (interactive)
+  (save-excursion
+    (replace-all "http://photo.mixi.jp/view_photo.pl?photo_id=" "<photo src=\"v2:")
+    (replace-all "&owner_id=1530" "\">")))
+
+;; 24.3.1
+(load-theme 'wombat)
