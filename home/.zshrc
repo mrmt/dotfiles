@@ -47,10 +47,7 @@ alias lv='lv -Ou8'
 export MANPATH="/usr/local/man:"`manpath`
 export MANPAGER=lv
 export LANG=ja_JP.utf-8
-export CVS_RSH=ssh
-export CVSEDITOR='open -t -W -n'
 export EDITOR='open -t -W -n'
-export PERL_BADLANG=
 export EMAIL=morimoto@mrmt.net
 export RUBYLIB=~/Library/Ruby
 
@@ -108,6 +105,7 @@ if [ "x" = "x`ps -x -u ${USER} | egrep '[s]sh-agent'`" ] ; then
 fi
 source ${HOME}/.ssh/agent-env
 
+export PERL_BADLANG=
 export PERL_LOCAL_LIB_ROOT="$HOME/perl5:$PERL_LOCAL_LIB_ROOT"
 export PERL_MB_OPT="--install_base "$HOME/perl5""
 export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
