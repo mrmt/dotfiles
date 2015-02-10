@@ -2,7 +2,26 @@
 # $Id: .zshrc,v 1.3 2002/07/08 00:57:16 morimoto Exp $
 # for Mac OS X
 
-path=(~/bin /usr/X11R6/bin /usr/local/sbin /usr/local/bin $path)
+export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/X11R6/bin:$PATH"
+export PATH="$HOME/perl5/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.rvm/bin:$PATH"
+
+export PERL_BADLANG=
+export PERL_LOCAL_LIB_ROOT="$HOME/perl5:$PERL_LOCAL_LIB_ROOT"
+export PERL_MB_OPT="--install_base "$HOME/perl5""
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
+export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
+
+export GOPATH="$HOME/go"
+
+export MANPATH="/usr/local/man:"`manpath`
+export MANPAGER=lv
+export LANG='ja_JP.utf-8'
+export EDITOR='open -t -W -n'
+export EMAIL='morimoto@mrmt.net'
+export RUBYLIB="$HOME/Library/Ruby"
 
 unset SSH_AUTH_SOCK
 
@@ -43,13 +62,6 @@ WORDCHARS='_-'
 
 alias ls='ls -CFv'
 alias lv='lv -Ou8'
-
-export MANPATH="/usr/local/man:"`manpath`
-export MANPAGER=lv
-export LANG=ja_JP.utf-8
-export EDITOR='open -t -W -n'
-export EMAIL=morimoto@mrmt.net
-export RUBYLIB=~/Library/Ruby
 
 # http://tehanu.hpcl.titech.ac.jp/zsh/
 # 拡張正規表現を使えるようにする
@@ -104,12 +116,3 @@ if [ "x" = "x`ps -x -u ${USER} | egrep '[s]sh-agent'`" ] ; then
   ssh-agent | sed -e "/^echo/d" > ${HOME}/.ssh/agent-env
 fi
 source ${HOME}/.ssh/agent-env
-
-export PERL_BADLANG=
-export PERL_LOCAL_LIB_ROOT="$HOME/perl5:$PERL_LOCAL_LIB_ROOT"
-export PERL_MB_OPT="--install_base "$HOME/perl5""
-export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
-export PERL5LIB="$HOME/perl5/lib/perl5:$PERL5LIB"
-export PATH="$HOME/perl5/bin:$PATH"
-export PATH="$PATH:$HOME/.rvm/bin"
-export GOPATH="$HOME/go"
