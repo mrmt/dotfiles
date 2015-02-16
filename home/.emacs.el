@@ -12,6 +12,7 @@
   (setq mac-command-key-is-meta t)
   (setq mac-option-modifier 'meta)
   (setq mac-command-modifier 'meta)
+  (setq ns-pop-up-frames nil)
   (setq browse-url-generic-program "open")
   (setq browse-url-browser-function 'browse-url-generic)
 
