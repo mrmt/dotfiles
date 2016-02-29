@@ -8,10 +8,13 @@
 
 (progn
   ;; OS X specific
-  (set-input-method "MacOSX")
+  (setq default-input-method "MacOSX")
   (setq mac-command-key-is-meta t)
   (setq mac-option-modifier 'meta)
   (setq mac-command-modifier 'meta)
+  (mac-add-key-passed-to-system 'shift)
+  (add-hook 'minibuffer-setup-hook 'mac-change-language-to-us)
+  (add-hook 'after-init-hook 'mac-change-language-to-us)
   (setq ns-pop-up-frames nil)
   (setq browse-url-generic-program "open")
   (setq browse-url-browser-function 'browse-url-generic)
