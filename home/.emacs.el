@@ -242,6 +242,7 @@
   (global-set-key "\C-o" 'toggle-input-method)
   (global-set-key "\C-c\C-w" 'kill-rectangle)
   (global-set-key "\C-c\C-y" 'yank-rectangle)
+  (global-unset-key "\C-z")
   )
 
 (progn
