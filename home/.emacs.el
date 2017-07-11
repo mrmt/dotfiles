@@ -250,6 +250,7 @@
   (show-paren-mode nil)
   (tool-bar-mode 0)
   (load-theme 'misterioso)
+  (set-cursor-color "green")
   (deactivate-input-method)
   (cd "~/")
   )
