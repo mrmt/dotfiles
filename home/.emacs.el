@@ -22,16 +22,14 @@
   (progn
     ;; font
     (create-fontset-from-ascii-font
-     "Menlo-13:weight=normal:slant=normal" nil "menlokakugo")
+     "Menlo-12:weight=normal:slant=normal" nil "menlokakugo")
     (set-fontset-font "fontset-menlokakugo"
 		      'unicode
 		      (font-spec :family "Hiragino Kaku Gothic ProN" :size 14)
 		      nil
 		      'append)
     (setq default-frame-alist '((width . 80) (height . 70)))
-    (add-to-list 'default-frame-alist '(font . "fontset-menlokakugo"))
-    )
-  )
+    (add-to-list 'default-frame-alist '(font . "fontset-menlokakugo"))))
 
 (progn
   ;; packages
@@ -154,9 +152,23 @@
 (progn
   ;; ui
   (show-paren-mode nil)
-  (tool-bar-mode 0)
-  (load-theme 'misterioso)
-  (deactivate-input-method)
+
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+
+  (load-theme 'whiteboard)
+  (set-face-background 'cursor "OrangeRed")
+  (set-face-background 'default "snow")
+  (set-face-background 'region "gainsboro")
+  (set-face-background 'show-paren-match "red")
+  (set-face-foreground 'bold "firebrick")
+
+  (defun set-alpha (alpha-num)
+    "set frame parameter 'alpha"
+    (interactive "nAlpha: ")
+    (set-frame-parameter nil 'alpha (cons alpha-num '(90))))
+  (set-frame-parameter nil 'alpha 95)
+
   (cd "~/")
   (find-file "~/a")
   )
